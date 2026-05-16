@@ -1,0 +1,1033 @@
+:root {
+  --bg: #1a1f26;
+  --panel: #252b35;
+  --border: #3a4454;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --sign-bg: #0a0a0a;
+  --sign-amber: #ff8c00;
+  --sign-amber-dim: #cc7000;
+  --sign-glow: rgba(255, 140, 0, 0.45);
+  --ok: #ffb84d;
+  --warn: #ff6b35;
+  --bad: #ff3333;
+  --font-ui: "Segoe UI", system-ui, sans-serif;
+  --font-sign: "Share Tech Mono", "Courier New", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-ui);
+  color: var(--text);
+  background:
+    linear-gradient(180deg, #2d3544 0%, var(--bg) 35%),
+    var(--bg);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  touch-action: manipulation;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 2.5rem;
+}
+
+.page--compact {
+  padding-top: 2rem;
+}
+
+.page-home {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, rgba(148, 163, 184, 0.16), transparent 42%),
+    linear-gradient(180deg, #2d3544 0%, var(--bg) 48%, #05070a 100%);
+  transition: background 450ms ease;
+}
+
+.page-home.traffic-bg--good {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(67, 190, 118, 0.42), transparent 46%),
+    linear-gradient(180deg, #184f32 0%, #102b21 36%, #05070a 100%);
+}
+
+.page-home.traffic-bg--caution {
+  background:
+    radial-gradient(circle at 35% 0%, rgba(72, 187, 120, 0.34), transparent 40%),
+    radial-gradient(circle at 70% 8%, rgba(245, 196, 65, 0.38), transparent 42%),
+    linear-gradient(180deg, #28542f 0%, #6a5a16 42%, #05070a 100%);
+}
+
+.page-home.traffic-bg--bad {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 70, 70, 0.48), transparent 45%),
+    linear-gradient(180deg, #5b1717 0%, #2a1014 44%, #05070a 100%);
+}
+
+.page-home.traffic-bg--neutral {
+  background:
+    radial-gradient(circle at top, rgba(148, 163, 184, 0.16), transparent 42%),
+    linear-gradient(180deg, #2d3544 0%, var(--bg) 48%, #05070a 100%);
+}
+
+.page-home .page--compact {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.page-nav {
+  text-align: center;
+  margin: 1rem 0 0;
+}
+
+.page-nav--top {
+  text-align: left;
+  margin: 0 0 0.5rem;
+}
+
+.page-nav a {
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.page-nav a:hover {
+  color: var(--sign-amber);
+}
+
+.controls--minimal {
+  width: 100%;
+  max-width: 420px;
+  margin: 1.25rem auto 0;
+}
+
+.controls--minimal label {
+  text-align: center;
+}
+
+.page-home .sign-stage {
+  margin-bottom: 0;
+}
+
+.sign-stage--home {
+  flex-direction: column;
+  align-items: center;
+  max-width: 520px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sign-stage--home > .road-sign {
+  width: 100%;
+  max-width: 520px;
+}
+
+.forecast-grid--single {
+  grid-template-columns: 1fr;
+  max-width: 360px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sign-stage--dual {
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 100%;
+  max-width: 920px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sign-stage--dual > .road-sign {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: none;
+}
+
+.sign-stage--dual .sign-face {
+  padding: 1rem 0.55rem 0.9rem;
+}
+
+.sign-stage--dual .sign-line--hero {
+  font-size: clamp(1.35rem, 5vw, 2.65rem);
+}
+
+.road-sign--primary {
+  max-width: 520px;
+  width: 100%;
+}
+
+.road-sign--secondary {
+  max-width: 380px;
+  width: 100%;
+}
+
+.page-nav--split {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem 1.25rem;
+}
+
+.page-nav--top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+
+/* —— 3-hour forecast —— */
+.forecast-panel {
+  width: 100%;
+  max-width: 520px;
+  margin: 1.25rem auto 0;
+  padding: 1rem 1.1rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.forecast-heading {
+  margin: 0 0 0.25rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.forecast-sub {
+  margin: 0 0 0.85rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.forecast-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+}
+
+@media (max-width: 420px) {
+  .forecast-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.forecast-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 8px;
+  border: 2px solid var(--border);
+  background: #0f1419;
+  text-align: center;
+}
+
+.forecast-chip__canyon {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.forecast-chip__status {
+  font-family: var(--font-sign);
+  font-size: 1.35rem;
+  letter-spacing: 0.12em;
+}
+
+.forecast-chip__when {
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.forecast-chip__detail {
+  font-size: 0.68rem;
+  color: var(--muted);
+  line-height: 1.3;
+  margin-top: 0.15rem;
+}
+
+.forecast-chip--normal {
+  border-color: #3a6b4a;
+}
+.forecast-chip--normal .forecast-chip__status {
+  color: #6fcf97;
+}
+
+.forecast-chip--slower {
+  border-color: #8a6b2e;
+}
+.forecast-chip--slower .forecast-chip__status {
+  color: var(--warn);
+}
+
+.forecast-chip--stopped {
+  border-color: #8a3333;
+  animation: forecast-pulse 2s ease-in-out infinite;
+}
+.forecast-chip--stopped .forecast-chip__status {
+  color: var(--bad);
+}
+
+@keyframes forecast-pulse {
+  50% {
+    opacity: 0.75;
+  }
+}
+
+/* —— Predictive traffic (slider + alert) —— */
+.predictive-panel {
+  width: 100%;
+  max-width: 520px;
+  margin: 1.25rem auto 0;
+  padding: 1rem 1.1rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.predictive-slider-row {
+  margin-bottom: 1rem;
+}
+
+.predictive-slider-label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+
+.predictive-slider {
+  width: 100%;
+  margin: 0.25rem 0 0.15rem;
+  accent-color: var(--warn, #d4a017);
+}
+
+.predictive-slider-ticks {
+  font-size: 0.65rem;
+  color: var(--muted);
+  padding: 0 2px;
+}
+
+.predictive-slider-ticks--5 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  text-align: center;
+}
+
+.predictive-error {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  color: var(--bad, #e57373);
+}
+
+.predictive-alert {
+  border-radius: 8px;
+  border: 2px solid var(--border);
+  background: #0f1419;
+  padding: 0.85rem 1rem;
+}
+
+.predictive-alert--loading {
+  border-style: dashed;
+  opacity: 0.9;
+}
+
+.predictive-alert--normal {
+  border-color: #3a6b4a;
+}
+
+.predictive-alert--normal .predictive-alert__verdict {
+  color: #6fcf97;
+}
+
+.predictive-alert--slower {
+  border-color: #8a6b2e;
+}
+
+.predictive-alert--slower .predictive-alert__verdict {
+  color: var(--warn);
+}
+
+.predictive-alert--stopped {
+  border-color: #8a3333;
+}
+
+.predictive-alert--stopped .predictive-alert__verdict {
+  color: var(--bad);
+}
+
+.predictive-alert__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin-bottom: 0.35rem;
+}
+
+.predictive-alert__label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.predictive-alert__verdict {
+  font-family: var(--font-sign);
+  font-size: 1.35rem;
+  letter-spacing: 0.12em;
+}
+
+.predictive-alert__confidence {
+  margin: 0 0 0.75rem;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.predictive-alert__loading {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.predictive-weather-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 480px) {
+  .predictive-weather-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.predictive-weather-card {
+  padding: 0.55rem 0.65rem;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border);
+}
+
+.predictive-weather-card__title {
+  display: block;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+
+.predictive-weather-card__body {
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: var(--foreground, #e6edf3);
+}
+
+.predictive-scores {
+  margin: 0 0 0.5rem;
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+
+.predictive-factors {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.predictive-factors li {
+  margin-bottom: 0.2rem;
+}
+
+.forecast-inline {
+  width: 100%;
+  max-width: 520px;
+  margin: 0.75rem auto 0;
+  padding: 0.6rem 0.85rem;
+  border-radius: 8px;
+  border: 2px solid var(--border);
+  background: #0f1419;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.forecast-inline__label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.forecast-inline__status {
+  font-family: var(--font-sign);
+  font-size: 1.25rem;
+  letter-spacing: 0.1em;
+}
+
+.forecast-inline__meta {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.forecast-inline--normal {
+  border-color: #3a6b4a;
+}
+.forecast-inline--normal .forecast-inline__status {
+  color: #6fcf97;
+}
+
+.forecast-inline--slower {
+  border-color: #8a6b2e;
+}
+.forecast-inline--slower .forecast-inline__status {
+  color: var(--warn);
+}
+
+.forecast-inline--stopped {
+  border-color: #8a3333;
+}
+.forecast-inline--stopped .forecast-inline__status {
+  color: var(--bad);
+}
+
+.page-home .footer {
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* —— Road sign —— */
+.sign-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.road-sign {
+  width: 100%;
+  max-width: 520px;
+}
+
+.sign-bezel {
+  padding: 14px;
+  border-radius: 6px;
+  background: linear-gradient(145deg, #4a5568 0%, #2d3748 50%, #1a202c 100%);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.sign-bezel--small {
+  padding: 10px;
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.sign-face {
+  background: var(--sign-bg);
+  border: 3px solid #1a1a1a;
+  border-radius: 2px;
+  padding: 1.25rem 1rem 1.1rem;
+  text-align: center;
+  box-shadow: inset 0 0 60px rgba(255, 140, 0, 0.06);
+}
+
+.sign-face--small {
+  padding: 0.85rem 0.65rem;
+}
+
+.sign-line {
+  font-family: var(--font-sign);
+  font-size: clamp(1rem, 3.5vw, 1.35rem);
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  color: var(--sign-amber);
+  text-shadow:
+    0 0 8px var(--sign-glow),
+    0 0 20px rgba(255, 140, 0, 0.25);
+  line-height: 1.35;
+  text-transform: uppercase;
+  word-break: break-word;
+}
+
+.sign-line--hero {
+  font-size: clamp(2.4rem, 12vw, 4.2rem);
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+  margin: 0.35rem 0;
+}
+
+.sign-line--sub {
+  font-size: clamp(0.75rem, 2.5vw, 0.95rem);
+  letter-spacing: 0.18em;
+  color: var(--sign-amber-dim);
+  margin-top: 0.5rem;
+}
+
+.sign-line--sm {
+  font-size: clamp(0.7rem, 2.2vw, 0.9rem);
+  letter-spacing: 0.12em;
+}
+
+.sign-face--small .sign-line--hero {
+  font-size: clamp(1.1rem, 4vw, 1.45rem);
+  margin: 0.15rem 0;
+}
+
+.sign-caption {
+  margin: 0.65rem 0 0;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+/* Sign states */
+.road-sign[data-state="loading"] .sign-face {
+  animation: sign-pulse 1.2s ease-in-out infinite;
+}
+
+.road-sign[data-state="ok"] .sign-line--hero {
+  color: var(--ok);
+  text-shadow: 0 0 12px var(--sign-glow);
+}
+
+.road-sign[data-state="warn"] .sign-line--hero {
+  color: var(--warn);
+  text-shadow: 0 0 12px rgba(255, 107, 53, 0.5);
+}
+
+.road-sign[data-state="bad"] .sign-line--hero {
+  color: var(--bad);
+  text-shadow: 0 0 14px rgba(255, 51, 51, 0.55);
+  animation: sign-blink 1.5s step-end infinite;
+}
+
+.road-sign[data-state="error"] .sign-line {
+  color: #ff6666;
+  text-shadow: none;
+}
+
+@keyframes sign-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@keyframes sign-blink {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* —— Controls —— */
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.1rem 1.2rem;
+}
+
+label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.address-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+#address {
+  flex: 1;
+  min-width: 0;
+  padding: 0.75rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #0f1419;
+  color: var(--text);
+  font: inherit;
+  font-size: 1rem;
+}
+
+#address:focus {
+  outline: 2px solid var(--sign-amber-dim);
+  outline-offset: 1px;
+}
+
+#refresh-btn {
+  flex-shrink: 0;
+  width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #0f1419;
+  color: var(--sign-amber);
+  font-size: 1.35rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+#refresh-btn:hover:not(:disabled) {
+  background: #1a2332;
+}
+
+#refresh-btn:disabled {
+  opacity: 0.4;
+  cursor: wait;
+}
+
+.status {
+  margin: 0.65rem 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+  min-height: 1.25em;
+}
+
+.status.updating {
+  color: var(--sign-amber);
+}
+
+.options {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.options summary {
+  cursor: pointer;
+  color: var(--muted);
+  user-select: none;
+}
+
+.options[open] summary {
+  margin-bottom: 0.75rem;
+}
+
+#threshold {
+  width: 5rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: #0f1419;
+  color: var(--text);
+  font: inherit;
+  margin-bottom: 0.75rem;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.breakdown {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.breakdown ul {
+  margin: 0.35rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.breakdown .from-line {
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+/* —— Cameras (collapsed by default in details or below) —— */
+.cameras-panel {
+  margin-top: 1.25rem;
+}
+
+.cameras-panel h2 {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.camera-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.65rem;
+}
+
+.cam-card {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #0f1419;
+}
+
+.cam-card img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+.cam-card .meta {
+  padding: 0.4rem 0.5rem;
+  font-size: 0.7rem;
+}
+
+.cam-card .label {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.cam-card .detail {
+  color: var(--muted);
+}
+
+.footer {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.footer a {
+  color: var(--sign-amber-dim);
+}
+
+a {
+  color: var(--sign-amber);
+}
+
+@media (max-width: 640px) {
+  body {
+    min-height: 100dvh;
+    background:
+      linear-gradient(180deg, #2d3544 0%, var(--bg) 28%),
+      var(--bg);
+  }
+
+  .page {
+    max-width: none;
+    padding: max(0.75rem, env(safe-area-inset-top)) 0.75rem
+      max(1rem, env(safe-area-inset-bottom));
+  }
+
+  .page--compact {
+    padding-top: 0.9rem;
+  }
+
+  .page-home .page--compact {
+    justify-content: flex-start;
+  }
+
+  .sign-stage {
+    gap: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  .sign-stage--home,
+  .sign-stage--home > .road-sign,
+  .controls--minimal,
+  .forecast-panel,
+  .predictive-panel {
+    max-width: 100%;
+  }
+
+  .sign-bezel {
+    padding: 10px;
+    box-shadow:
+      0 8px 28px rgba(0, 0, 0, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+
+  .sign-face {
+    padding: 1rem 0.7rem 0.9rem;
+  }
+
+  .sign-line {
+    font-size: clamp(0.82rem, 4.4vw, 1.05rem);
+    letter-spacing: 0.1em;
+    line-height: 1.28;
+  }
+
+  .sign-line--hero {
+    font-size: clamp(2.2rem, 17vw, 3.7rem);
+    letter-spacing: 0.06em;
+    margin: 0.25rem 0;
+  }
+
+  .sign-line--sub {
+    font-size: clamp(0.66rem, 3vw, 0.82rem);
+    letter-spacing: 0.12em;
+    margin-top: 0.35rem;
+  }
+
+  .controls--minimal {
+    margin-top: 0.9rem;
+  }
+
+  .address-row {
+    gap: 0.45rem;
+  }
+
+  #address {
+    min-height: 2.85rem;
+    padding: 0.72rem 0.8rem;
+    font-size: 1rem;
+  }
+
+  #refresh-btn {
+    width: 2.85rem;
+    min-height: 2.85rem;
+  }
+
+  .status {
+    text-align: center;
+    font-size: 0.8rem;
+  }
+
+  .forecast-panel,
+  .predictive-panel,
+  .panel {
+    margin-top: 0.95rem;
+    padding: 0.85rem;
+    border-radius: 9px;
+  }
+
+  .forecast-sub {
+    font-size: 0.72rem;
+    line-height: 1.4;
+  }
+
+  .predictive-alert {
+    padding: 0.75rem;
+  }
+
+  .predictive-alert__head {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+
+  .predictive-alert__verdict {
+    font-size: 1.25rem;
+  }
+
+  .predictive-weather-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .predictive-slider {
+    min-height: 2rem;
+  }
+
+  .predictive-slider-ticks {
+    font-size: 0.6rem;
+  }
+
+  .predictive-factors {
+    padding-left: 1rem;
+    font-size: 0.7rem;
+  }
+
+  .page-nav a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0.55rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: rgba(15, 20, 25, 0.65);
+  }
+
+  .footer {
+    margin-top: 1rem;
+    padding-bottom: 0.25rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .page {
+    padding-left: 0.55rem;
+    padding-right: 0.55rem;
+  }
+
+  .sign-bezel {
+    padding: 8px;
+  }
+
+  .sign-face {
+    padding: 0.85rem 0.55rem 0.8rem;
+  }
+
+  .forecast-panel,
+  .predictive-panel,
+  .panel {
+    padding: 0.75rem;
+  }
+
+  .predictive-weather-card {
+    padding: 0.5rem;
+  }
+}

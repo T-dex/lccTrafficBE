@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Little Cottonwood / Alta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body class="page-home">
+  <div class="page page--compact">
+    <section class="sign-stage sign-stage--home" aria-labelledby="main-sign-label">
+      <p id="main-sign-label" class="sr-only">Estimated drive time to Little Cottonwood canyon top</p>
+
+      <div id="lcc-sign" class="road-sign road-sign--primary" data-state="loading">
+        <div class="sign-bezel">
+          <div class="sign-face">
+            <div class="sign-line lcc-l1">LITTLE COTTONWOOD</div>
+            <div class="sign-line sign-line--hero lcc-l2">···</div>
+            <div class="sign-line sign-line--sub lcc-l3">CANYON TOP</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="controls controls--minimal">
+      <label for="address">From</label>
+      <div class="address-row">
+        <input
+          id="address"
+          type="text"
+          placeholder="100 S Main St, Salt Lake City, UT"
+          autocomplete="street-address"
+        />
+        <button id="refresh-btn" type="button" title="Update now">↻</button>
+      </div>
+      <p id="status" class="status" role="status"></p>
+    </section>
+
+    <section id="forecast-panel" class="forecast-panel hidden" aria-label="Three hour outlook"></section>
+
+    <nav class="page-nav page-nav--split">
+      <a href="/full">Little Cottonwood / Alta full trip →</a>
+    </nav>
+
+    <footer class="footer">
+      <p>UDOT live signs · <a href="https://cottonwoodcanyons.udot.utah.gov/road-information/" target="_blank" rel="noopener">road info</a></p>
+    </footer>
+  </div>
+
+  <script type="module" src="/static/home.js"></script>
+</body>
+</html>

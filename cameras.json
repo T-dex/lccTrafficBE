@@ -1,0 +1,31 @@
+{
+  "source": "https://cottonwoodcanyons.udot.utah.gov/road-information/",
+  "lcc": {
+    "destination": { "lat": 40.588, "lon": -111.638, "label": "Alta Ski Area" },
+    "canyon_mouth": { "lat": 40.623, "lon": -111.798, "label": "LCC mouth (6200 S area)" },
+    "clear_canyon_top_minutes": 15,
+    "tail_top_to_dest_minutes": 8
+  },
+  "alta": { "lat": 40.588, "lon": -111.638, "label": "Alta Ski Area" },
+  "canyon_mouth": { "lat": 40.623, "lon": -111.798, "label": "LCC mouth (6200 S area)" },
+  "clear_canyon_top_minutes": 15,
+  "tail_top_to_alta_minutes": 8,
+  "lcc_cameras": [
+    { "id": "124681", "mp": 0, "label": "Mouth — LCC Rd @ SR-209", "weight": 1.4 },
+    { "id": "124398", "mp": 5.96, "label": "Upper Vault MP 5.96", "weight": 1.2 },
+    { "id": "124585", "mp": 7.4, "label": "Seven Turns MP 7.4", "weight": 1.1 },
+    { "id": "126353", "mp": 9.2, "label": "White Pine MP 9.2", "weight": 1.0 },
+    { "id": "126828", "mp": 9.7, "label": "Upper White Pine MP 9.7", "weight": 0.9 },
+    { "id": "127424", "mp": 10.95, "label": "Alta Bypass MP 10.95", "weight": 0.85 },
+    { "id": "126872", "mp": 12.16, "label": "Alta MP 12.16", "weight": 0.8 }
+  ],
+  "approach_cameras": [
+    { "id": "126337", "mp": 0, "label": "9800 S @ Wasatch Blvd", "weight": 0.7 },
+    { "id": "124842", "mp": 0, "label": "3335 E @ Old Wasatch", "weight": 0.6 },
+    { "id": "125411", "mp": 0, "label": "9400 S @ 2300 E", "weight": 0.5 }
+  ],
+  "wasatch_cameras": [
+    { "id": "aux16608", "url": "https://udottraffic.utah.gov/1_devices/aux16608.jpeg", "label": "SR-210 @ Wasatch / 8900 S", "weight": 1.0 },
+    { "id": "aux16606", "url": "https://udottraffic.utah.gov/1_devices/aux16606.jpeg", "label": "Wasatch @ 7800 S", "weight": 0.9 }
+  ]
+}
