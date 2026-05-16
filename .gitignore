@@ -9,6 +9,7 @@ build/
 __pycache__/
 *.py[cod]
 .venv/
+web/
 
 # Local env files. Commit .env.example files instead.
 .env
