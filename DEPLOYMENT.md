@@ -17,11 +17,13 @@ Recommended settings:
 - Start command: `npm start`
 - Node version: `20+`
 - Health check: `GET /api/health`
+- Root directory: the folder containing this `package.json` (`alta-drive` if your GitHub repo has this app in a subfolder)
+
+Render provides the `PORT` environment variable automatically. Do not hard-code `PORT=8765` in Render; that value is only for local development.
 
 Environment variables:
 
 ```bash
-PORT=8765
 USER_AGENT="AltaDriveEstimator/1.0 (your-email@example.com)"
 CAMERA_CACHE_MS=120000
 NOMINATIM_URL=https://nominatim.openstreetmap.org/search

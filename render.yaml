@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: alta-drive-api
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: USER_AGENT
+        value: AltaDriveEstimator/1.0 (contact@example.com)
+      - key: CAMERA_CACHE_MS
+        value: 120000
+      - key: NOMINATIM_URL
+        value: https://nominatim.openstreetmap.org/search
+      - key: OSRM_URL
+        value: http://router.project-osrm.org/route/v1/driving
+      - key: COTTONWOOD_ROAD_INFO_URL
+        value: https://cottonwoodcanyons.udot.utah.gov/road-information/
+      - key: UDOT_CCTV_URL_TEMPLATE
+        value: https://www.udottraffic.utah.gov/map/Cctv/{id}
+      - key: NWS_POINTS_URL_TEMPLATE
+        value: https://api.weather.gov/points/{lat},{lon}
