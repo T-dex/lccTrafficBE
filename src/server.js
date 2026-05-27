@@ -11,6 +11,7 @@ import {
   signDelayMinutes,
 } from "./lib/analyzer.js";
 import { avgCameraCongestion, predictCanyon3h } from "./lib/forecast.js";
+import { geocodeAddress } from "./lib/nominatim.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,38 +19,12 @@ const ROOT = path.join(__dirname, "..");
 const STATIC = path.join(ROOT, "static");
 
 const USER_AGENT = process.env.USER_AGENT || "AltaDriveEstimator/1.0";
-const NOMINATIM = process.env.NOMINATIM_URL || "https://nominatim.openstreetmap.org/search";
 const OSRM = process.env.OSRM_URL || "http://router.project-osrm.org/route/v1/driving";
 const THRESHOLD_MINUTES = 90;
 const PORT = process.env.PORT || 8765;
 
 function udotLccTop(signs) {
   return signs.lcc_top_minutes;
-}
-
-async function geocode(address, signal) {
-  const params = new URLSearchParams({
-    q: address,
-    format: "json",
-    limit: "1",
-    countrycodes: "us",
-  });
-  const r = await fetch(`${NOMINATIM}?${params}`, {
-    headers: { "User-Agent": USER_AGENT },
-    signal,
-  });
-  if (!r.ok) throw new Error(`Geocode ${r.status}`);
-  const rows = await r.json();
-  if (!rows.length) {
-    const err = new Error(`Could not geocode address: ${address}`);
-    err.status = 400;
-    throw err;
-  }
-  return {
-    lat: parseFloat(rows[0].lat),
-    lon: parseFloat(rows[0].lon),
-    label: rows[0].display_name || address,
-  };
 }
 
 async function osrmMinutes(lon1, lat1, lon2, lat2, signal) {
@@ -265,7 +240,21 @@ async function runEstimate(body, signal) {
   const includeCameras = body.include_cameras !== false;
   const includeForecast = body.include_forecast !== false;
 
-  const { lat: homeLat, lon: homeLon, label: homeLabel } = await geocode(address, signal);
+  let homeLat;
+  let homeLon;
+  let homeLabel;
+  const latIn = Number(body.home_lat);
+  const lonIn = Number(body.home_lon);
+  if (Number.isFinite(latIn) && Number.isFinite(lonIn)) {
+    homeLat = latIn;
+    homeLon = lonIn;
+    homeLabel = String(body.home_label || address).trim() || address;
+  } else {
+    const geo = await geocodeAddress(address, signal);
+    homeLat = geo.lat;
+    homeLon = geo.lon;
+    homeLabel = geo.label;
+  }
   const signs = await fetchCottonwoodSigns(signal);
 
   const result = await estimateLcc(
