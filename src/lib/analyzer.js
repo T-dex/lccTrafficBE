@@ -1,5 +1,6 @@
 import sharp from "sharp";
 import { CONFIG } from "./config.js";
+import { memo } from "./memo.js";
 
 const COTTONWOOD_URL =
   process.env.COTTONWOOD_ROAD_INFO_URL || "https://cottonwoodcanyons.udot.utah.gov/road-information/";
@@ -42,14 +43,15 @@ export function parseSigns(html) {
   return { messages, lcc_top_minutes: lccTopMinutes, alerts };
 }
 
-export async function fetchCottonwoodSigns(signal) {
-  const r = await fetch(COTTONWOOD_URL, {
-    headers: { "User-Agent": USER_AGENT },
-    signal,
+export function fetchCottonwoodSigns(signal) {
+  return memo("signs", 60_000, async () => {
+    const r = await fetch(COTTONWOOD_URL, {
+      headers: { "User-Agent": USER_AGENT },
+      signal,
+    });
+    if (!r.ok) throw new Error(`Cottonwood fetch ${r.status}`);
+    return parseSigns(await r.text());
   });
-  if (!r.ok) throw new Error(`Cottonwood fetch ${r.status}`);
-  const html = await r.text();
-  return parseSigns(html);
 }
 
 /**

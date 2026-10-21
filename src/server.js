@@ -12,6 +12,7 @@ import {
 } from "./lib/analyzer.js";
 import { avgCameraCongestion, predictCanyon3h } from "./lib/forecast.js";
 import { geocodeAddress } from "./lib/nominatim.js";
+import { memo } from "./lib/memo.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -27,20 +28,22 @@ function udotLccTop(signs) {
   return signs.lcc_top_minutes;
 }
 
-async function osrmMinutes(lon1, lat1, lon2, lat2, signal) {
+function osrmMinutes(lon1, lat1, lon2, lat2, signal) {
   const url = `${OSRM}/${lon1},${lat1};${lon2},${lat2}?overview=false`;
-  const r = await fetch(url, {
-    headers: { "User-Agent": USER_AGENT },
-    signal,
+  return memo(url, 60 * 60_000, async () => {
+    const r = await fetch(url, {
+      headers: { "User-Agent": USER_AGENT },
+      signal,
+    });
+    if (!r.ok) throw new Error(`OSRM ${r.status}`);
+    const data = await r.json();
+    if (data.code !== "Ok" || !data.routes?.length) {
+      const err = new Error("Routing service unavailable");
+      err.status = 502;
+      throw err;
+    }
+    return data.routes[0].duration / 60;
   });
-  if (!r.ok) throw new Error(`OSRM ${r.status}`);
-  const data = await r.json();
-  if (data.code !== "Ok" || !data.routes?.length) {
-    const err = new Error("Routing service unavailable");
-    err.status = 502;
-    throw err;
-  }
-  return data.routes[0].duration / 60;
 }
 
 function buildCanyonPayload(
@@ -282,7 +285,7 @@ async function runEstimate(body, signal) {
 
 const app = express();
 app.use(express.json({ limit: "32kb" }));
-app.use("/static", express.static(STATIC));
+app.use("/static", express.static(STATIC, { maxAge: "5m" }));
 
 app.get("/", (req, res) => res.sendFile(path.join(STATIC, "index.html")));
 app.get("/full", (req, res) => res.sendFile(path.join(STATIC, "full.html")));

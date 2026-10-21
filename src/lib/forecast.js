@@ -1,4 +1,5 @@
 import { CONFIG } from "./config.js";
+import { memo } from "./memo.js";
 
 const NWS_POINTS = process.env.NWS_POINTS_URL_TEMPLATE || "https://api.weather.gov/points/{lat},{lon}";
 const USER_AGENT = process.env.USER_AGENT || "AltaDriveEstimator/1.0 (cottonwood forecast)";
@@ -223,28 +224,21 @@ function pickClosestPeriod(periods, whenMs) {
  * NWS hourly: conditions near Alta now vs the hour closest to (now + hoursAhead).
  * Scoring uses the target hour; factors summarize both when they differ.
  */
+function fetchNwsPeriods(lat, lon, signal) {
+  return memo(`nws:${lat},${lon}`, 10 * 60_000, async () => {
+    const headers = { "User-Agent": USER_AGENT, Accept: "application/geo+json" };
+    const u1 = NWS_POINTS.replace("{lat}", String(lat)).replace("{lon}", String(lon));
+    const r1 = await fetch(u1, { headers, signal });
+    if (!r1.ok) throw new Error(`NWS points ${r1.status}`);
+    const j1 = await r1.json();
+    const r2 = await fetch(j1.properties.forecastHourly, { headers, signal });
+    if (!r2.ok) throw new Error(`NWS hourly ${r2.status}`);
+    return (await r2.json()).properties.periods;
+  });
+}
+
 export async function fetchWeatherPlusHours(lat, lon, hoursAhead, signal) {
-  const u1 = NWS_POINTS.replace("{lat}", String(lat)).replace("{lon}", String(lon));
-  const r1 = await fetch(u1, {
-    headers: {
-      "User-Agent": USER_AGENT,
-      Accept: "application/geo+json",
-    },
-    signal,
-  });
-  if (!r1.ok) throw new Error(`NWS points ${r1.status}`);
-  const j1 = await r1.json();
-  const hourlyUrl = j1.properties.forecastHourly;
-  const r2 = await fetch(hourlyUrl, {
-    headers: {
-      "User-Agent": USER_AGENT,
-      Accept: "application/geo+json",
-    },
-    signal,
-  });
-  if (!r2.ok) throw new Error(`NWS hourly ${r2.status}`);
-  const j2 = await r2.json();
-  const periods = j2.properties.periods;
+  const periods = await fetchNwsPeriods(lat, lon, signal);
   const nowMs = Date.now();
   const targetMs = nowMs + hoursAhead * 3600 * 1000;
   const nowPeriod = pickClosestPeriod(periods, nowMs);
